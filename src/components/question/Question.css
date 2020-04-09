@@ -1,0 +1,10 @@
+.questionCard {
+    padding-left: 1em;
+    padding-bottom: 1em;
+    padding-right: 1em;
+    margin: 0.5em;
+}
+
+.warning {
+    color: #f44336
+}

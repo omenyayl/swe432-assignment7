@@ -1,0 +1,19 @@
+.App {
+}
+
+.warning {
+    color: #f44336;
+}
+
+.mainContainer {
+    padding-bottom: 2em;
+}
+
+.fixedPosition {
+    position: fixed;
+    top: 0;
+}
+
+.hidden {
+    visibility: hidden;
+}
