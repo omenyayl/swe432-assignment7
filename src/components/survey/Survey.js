@@ -8,6 +8,7 @@ import SnackBar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert';
 import { Link as MatLink }from "@material-ui/core";
 import PropTypes from "prop-types";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 export default class Survey extends React.Component {
     responses = {};
@@ -38,11 +39,14 @@ export default class Survey extends React.Component {
                         userHitSubmit={this.state.userHitSubmit}
                         onUserRespond={this.onUserRespond}
                         questions={this.state.questions}/>
-                    <Button style={{margin: "0.5em"}}
-                            type="submit"
-                            variant="contained"
-                            disabled={this.props.isLoading}
-                            color="primary">Submit</Button>
+                    <div className="two-grid">
+                        <Button style={{marginLeft: "0.5em"}}
+                                type="submit"
+                                variant="contained"
+                                disabled={this.props.isLoading}
+                                color="primary">Submit</Button>
+                        <CircularProgress className={this.props.isLoading ? '' : 'hidden'} style={{marginLeft: '0.5em'}} />
+                    </div>
                     <SnackBar
                         open={!this.state.responsesValid && this.state.userHitSubmit && this.state.snackbarShown}
                         onClose={this.handleClose}

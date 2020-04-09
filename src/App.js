@@ -1,94 +1,92 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import Survey from "./components/survey/Survey";
 import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link,
 } from "react-router-dom";
 import Results from "./components/results/Results";
 import Container from "@material-ui/core/Container";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import axios from 'axios';
 import SnackBar from "@material-ui/core/Snackbar/Snackbar";
 import Alert from "@material-ui/lab/Alert/Alert";
+import PropTypes from "prop-types";
 
-const API_URL = "http://localhost:8080/assignment7";
+const API_URL = "https://olegs-tech.space/assignment7";
 
-export default class App extends React.Component {
+const SurveyRoute = ({ history, onGetProcessedResponses}) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [snackbarShown, setSnackbarShown] = useState(false);
+    const [networkError, setNetworkError] = useState(false);
 
-    state = {
-        responsesArray: [],
-        isLoading: false,
-        networkError: false,
-        snackbarShown: false
-    };
-
-    handleClose = () => {
-        this.setState({
-            snackbarShown: false
-        })
-    };
-
-    onUserSubmit = (history, responsesArray) => {
-        this.setState({
-            isLoading: true
-        });
+    const onUserSubmit = (responsesArray) => {
+        setIsLoading(true);
         axios.post(API_URL, responsesArray)
             .then(res => {
-                this.setState({
-                    responsesArray: Array.from(res.data),
-                    isLoading: false,
-                });
+                setIsLoading(false);
+                onGetProcessedResponses(res.data);
                 history.push("/results")
             })
             .catch(e => {
                 console.error(e);
-                this.setState({
-                    isLoading: false,
-                    snackbarShown: true,
-                    networkError: true
-                });
-            });
+                setNetworkError(true);
+                setSnackbarShown(true);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
     };
 
-    renderRoot = ({ history }) => {
-        return (
-            <div>
-                <Survey isLoading={this.state.isLoading} onUserSubmit={this.onUserSubmit.bind(this, history)}/>
-                <CircularProgress className={this.state.isLoading ? '' : 'hidden'} style={{marginLeft: '0.5em'}} />
-                <SnackBar
-                    open={this.state.networkError && this.state.snackbarShown}
-                    onClose={this.handleClose}
-                    autoHideDuration={5000}>
-                    <Alert severity="error">A network error occurred, please try again later.</Alert>
-                </SnackBar>
-            </div>
-        )
-    };
+    return (
+        <div>
+            <Survey isLoading={isLoading} onUserSubmit={onUserSubmit}/>
+            <SnackBar
+                open={networkError && snackbarShown}
+                onClose={() => { setSnackbarShown(false) }}
+                autoHideDuration={3500}>
+                <Alert severity="error">A network error occurred, please try again later.</Alert>
+            </SnackBar>
+        </div>
+    )
+};
+SurveyRoute.propTypes = {
+    history: PropTypes.object.isRequired,
+    onGetProcessedResponses: PropTypes.func.isRequired
+};
 
-    renderResults = ({ history }) => {
-        if (this.state.responsesArray.length === 0) { // if responses empty
-            history.push("/")
-        }
-        return (
-            <Results responsesArray={this.state.responsesArray}/>
-        )
-    };
-
-    render() {
-      return (
-          <Router>
-              <Container className="mainContainer">
-                  <Switch>
-                      <Route exact path="/" render={this.renderRoot} />
-                      <Route exact path="/results" render={this.renderResults} />
-                  </Switch>
-              </Container>
-          </Router>
-      );
+const ResultsRoute = ({ history, responsesArray }) => {
+    if (responsesArray.length === 0) { // if responses empty
+        history.push("/")
     }
-}
+    return (
+        <Results responsesArray={responsesArray}/>
+    )
+};
+ResultsRoute.propTypes = {
+    history: PropTypes.object.isRequired,
+    responsesArray: PropTypes.array.isRequired
+};
 
 
+const App = () => {
+
+    const [responsesArray, setResponsesArray] = useState([]);
+
+    return (
+        <Router>
+            <Container className="mainContainer">
+                <Switch>
+                    <Route exact path="/" render={({history}) => (
+                        <SurveyRoute history={history} onGetProcessedResponses={setResponsesArray} />
+                    )}/>
+                    <Route exact path="/results" render={({history}) => (
+                        <ResultsRoute history={history} responsesArray={responsesArray} />
+                    )}/>
+                </Switch>
+            </Container>
+        </Router>
+    );
+};
+
+export default App;

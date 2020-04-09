@@ -17,3 +17,8 @@
 .hidden {
     visibility: hidden;
 }
+
+.two-grid {
+    display: grid;
+    grid-template-columns: 6em 6em;
+}
