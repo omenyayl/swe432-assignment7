@@ -24,7 +24,6 @@ const SurveyRoute = ({ history, onGetProcessedResponses}) => {
         setIsLoading(true);
         axios.post(API_URL, responsesArray)
             .then(res => {
-                setIsLoading(false);
                 onGetProcessedResponses(res.data);
                 history.push("/results")
             })
