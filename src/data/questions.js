@@ -1,4 +1,4 @@
-export const questions = [
+const questions = [
     {
         id: 1,
         title: 'What is the most important quality of a classroom?',
@@ -53,5 +53,12 @@ export const questions = [
         id: 6,
         title: 'What is your major at GMU?',
         optionsType: 'textBox'
-    }
+    },
+    {
+        id: 7,
+        title: 'What is your name?',
+        optionsType: 'textBox'
+    },
 ];
+
+export default questions;

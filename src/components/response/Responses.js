@@ -35,5 +35,5 @@ export default class Responses extends React.Component {
 }
 
 Responses.propTypes = {
-    responsesArray: PropTypes.any.isRequired
+    responsesArray: PropTypes.array.isRequired
 };

@@ -22,3 +22,7 @@
     display: grid;
     grid-template-columns: 6em 6em;
 }
+
+.leftPadding {
+    padding-left: 1em;
+}

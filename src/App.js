@@ -12,10 +12,11 @@ import axios from 'axios';
 import SnackBar from "@material-ui/core/Snackbar/Snackbar";
 import Alert from "@material-ui/lab/Alert/Alert";
 import PropTypes from "prop-types";
+import submissions from './data/submissions';
 
 const API_URL = "https://olegs-tech.space/assignment7";
 
-const SurveyRoute = ({ history, onGetProcessedResponses}) => {
+const SurveyRoute = ({ history, onGetSubmissions}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [snackbarShown, setSnackbarShown] = useState(false);
     const [networkError, setNetworkError] = useState(false);
@@ -24,7 +25,8 @@ const SurveyRoute = ({ history, onGetProcessedResponses}) => {
         setIsLoading(true);
         axios.post(API_URL, responsesArray)
             .then(res => {
-                onGetProcessedResponses(res.data);
+                onGetSubmissions(submissions);
+                console.log(JSON.stringify(res.data, null, 4));
                 history.push("/results")
             })
             .catch(e => {
@@ -51,36 +53,39 @@ const SurveyRoute = ({ history, onGetProcessedResponses}) => {
 };
 SurveyRoute.propTypes = {
     history: PropTypes.object.isRequired,
-    onGetProcessedResponses: PropTypes.func.isRequired
+    onGetSubmissions: PropTypes.func.isRequired
 };
 
-const ResultsRoute = ({ history, responsesArray }) => {
-    if (responsesArray.length === 0) { // if responses empty
-        history.push("/")
+const ResultsRoute = ({ history, submissionsArray }) => {
+    if (submissionsArray.length === 0) { // if responses empty
+        // history.push("/")
+        return (
+            <Results submissionsArray={submissions}/>
+        )
     }
     return (
-        <Results responsesArray={responsesArray}/>
+        <Results submissionsArray={submissionsArray}/>
     )
 };
 ResultsRoute.propTypes = {
     history: PropTypes.object.isRequired,
-    responsesArray: PropTypes.array.isRequired
+    submissionsArray: PropTypes.array.isRequired
 };
 
 
 const App = () => {
 
-    const [responsesArray, setResponsesArray] = useState([]);
+    const [submissions, setSubmissions] = useState([]);
 
     return (
         <Router>
             <Container className="mainContainer">
                 <Switch>
                     <Route exact path="/" render={({history}) => (
-                        <SurveyRoute history={history} onGetProcessedResponses={setResponsesArray} />
+                        <SurveyRoute history={history} onGetSubmissions={setSubmissions} />
                     )}/>
                     <Route exact path="/results" render={({history}) => (
-                        <ResultsRoute history={history} responsesArray={responsesArray} />
+                        <ResultsRoute history={history} submissionsArray={submissions} />
                     )}/>
                 </Switch>
             </Container>

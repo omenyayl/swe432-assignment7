@@ -2,7 +2,7 @@ import React from 'react';
 import '../../App.css'
 import { Container } from '@material-ui/core'
 import Questions from "../questions/Questions";
-import { questions } from "../../data/questions";
+import questions from "../../data/questions";
 import Button from "@material-ui/core/Button";
 import SnackBar from '@material-ui/core/Snackbar'
 import Alert from '@material-ui/lab/Alert';
