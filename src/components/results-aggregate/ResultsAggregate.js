@@ -64,16 +64,13 @@ const getAggregatesArray = (questions, submissions) => {
 const QuestionAggregate = ({ questionResponses }) => {
     return (
         <Paper>
-            <Chart
-                data={questionResponses.optionResponses}
-            >
+            <Chart data={questionResponses.optionResponses}>
                 <ArgumentAxis />
                 <ValueAxis tickInterval={1} />
 
                 <BarSeries
                     valueField="sum"
-                    argumentField="title"
-                />
+                    argumentField="title"/>
                 <Title text={questionResponses.title} />
                 <Animation />
             </Chart>
@@ -95,7 +92,6 @@ const ResultsAggregate = ({ submissionsArray }) => {
     return (
         <div>
             {aggregatesArray.map((questionResponses, index) => {
-                console.log(questionResponses);
                 return (
                     <div key={index} >
                         <QuestionAggregate questionResponses={questionResponses}/>

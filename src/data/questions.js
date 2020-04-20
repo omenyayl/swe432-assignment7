@@ -54,11 +54,6 @@ const questions = [
         title: 'What is your major at GMU?',
         optionsType: 'textBox'
     },
-    {
-        id: 7,
-        title: 'What is your name?',
-        optionsType: 'textBox'
-    },
 ];
 
 export default questions;

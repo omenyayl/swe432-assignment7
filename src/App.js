@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import Survey from "./components/survey/Survey";
 import {
@@ -12,9 +12,8 @@ import axios from 'axios';
 import SnackBar from "@material-ui/core/Snackbar/Snackbar";
 import Alert from "@material-ui/lab/Alert/Alert";
 import PropTypes from "prop-types";
-import submissions from './data/submissions';
 
-const API_URL = "https://olegs-tech.space/assignment7";
+const API_URL = "https://olegs-tech.space/assignment8";
 
 const SurveyRoute = ({ history, onGetSubmissions}) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -22,12 +21,17 @@ const SurveyRoute = ({ history, onGetSubmissions}) => {
     const [networkError, setNetworkError] = useState(false);
 
     const onUserSubmit = (responsesArray) => {
+        const submission = {
+            responses: responsesArray
+        };
         setIsLoading(true);
-        axios.post(API_URL, responsesArray)
-            .then(res => {
-                onGetSubmissions(submissions);
-                console.log(JSON.stringify(res.data, null, 4));
-                history.push("/results")
+        axios.post(API_URL, submission)
+            .then(() => {
+                axios.get(API_URL)
+                    .then(res => {
+                        onGetSubmissions(res.data);
+                        history.push("/results")
+                    });
             })
             .catch(e => {
                 console.error(e);
@@ -57,8 +61,18 @@ SurveyRoute.propTypes = {
 };
 
 const ResultsRoute = ({ history, submissionsArray }) => {
+
+    const [submissions, setSubmissions] = useState([]);
+
+    useEffect(() => {
+        if (submissionsArray.length === 0) {
+            axios.get(API_URL)
+                .then(res => setSubmissions(res.data))
+                .catch(e => console.error(e));
+        }
+    }, [submissionsArray.length]);
+
     if (submissionsArray.length === 0) { // if responses empty
-        // history.push("/")
         return (
             <Results submissionsArray={submissions}/>
         )

@@ -18,8 +18,8 @@ Responses.propTypes = {
 const ResultsList = ({ submissionsArray }) => {
     return (
         <div>
-            {submissionsArray.map(submission => (
-                <div key={submission.id}>
+            {submissionsArray.map((submission, i) => (
+                <div key={i}>
                     <Card>
                         <CardContent>
                             <Responses responsesArray={submission.responses}/>

@@ -1,8 +1,6 @@
 const submissions =
 [
     {
-        id: 1,
-        name: 'oleg',
         responses: [
             {
                 "id": "1",
@@ -28,15 +26,9 @@ const submissions =
                 "id": "6",
                 "response": "ewrtwer"
             },
-            {
-                "id": "7",
-                "response": "oleg"
-            }
         ]
     },
     {
-        id: 2,
-        name: 'rick',
         responses: [
             {
                 "id": "1",
@@ -62,15 +54,9 @@ const submissions =
                 "id": "6",
                 "response": "world"
             },
-            {
-                "id": "7",
-                "response": "rick"
-            }
         ]
     },
     {
-        id: 3,
-        name: 'john',
         responses: [
             {
                 "id": "1",
@@ -96,10 +82,6 @@ const submissions =
                 "id": "6",
                 "response": "world"
             },
-            {
-                "id": "7",
-                "response": "rick"
-            }
         ]
     },
 ];
